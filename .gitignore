@@ -1,0 +1,55 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+venv/
+ENV/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# PDF and report output files
+*.pdf
+*.md
+
+# System files
+.DS_Store
+Thumbs.db
+
+# PyInstaller
+*.spec
+dist/
+build/
+
+# VSCode config
+.vscode/
+
+# dotenv environment variable files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Static HTML/JS/CSS build artifacts (optional)
+static/*.pdf
+static/*.zip
+
+# MyPy cache
+.mypy_cache/
+
+# Pyre type checker
+.pyre/
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+
+
+.env

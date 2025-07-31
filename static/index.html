@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Report Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Load marked.js -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #4A00E0;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin: 1rem 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #8E04FF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #4A00E0;
+    }
+
+    .output {
+      margin-top: 2rem;
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+
+    .output h1, .output h2, .output h3 {
+      color: #333;
+    }
+
+    .output ul {
+      padding-left: 20px;
+    }
+
+    .error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Generate AI Report</h2>
+    <input type="text" id="topicInput" placeholder="Enter your topic..." />
+    <button onclick="generateReport()">Generate</button>
+
+    <div id="result" class="output"></div>
+    <div id="error" class="error"></div>
+  </div>
+
+  <script>
+    async function generateReport() {
+      const topic = document.getElementById('topicInput').value;
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+
+      resultDiv.innerHTML = '';
+      errorDiv.textContent = '';
+
+      if (!topic.trim()) {
+        errorDiv.textContent = 'Please enter a topic.';
+        return;
+      }
+
+      try {
+        const response = await fetch('/generate-report', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ topic })
+        });
+
+        if (!response.ok) {
+          throw new Error(await response.text());
+        }
+
+        const data = await response.json(); // Expecting { report: "markdown text" }
+
+        // Convert markdown to HTML using marked
+        const htmlContent = marked.parse(data.report);
+        resultDiv.innerHTML = htmlContent;
+
+      } catch (err) {
+        errorDiv.textContent = 'Error: ' + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
